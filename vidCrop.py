@@ -23,15 +23,11 @@ def main(mp4=True, webm=True):
 	if (doMP4 or doWebM):
 
 		mainDir = prompt(text="Please enter the address of the directory that you want to compress the videos from:",
-						 title="Video Directory", default="C:\\Users\\momo\\Desktop\\video samples\\")
+						 title="Video Directory", default="path/to/files")
 		saveDir = prompt(text="Please enter the address of the directory that you want to compress the videos to:",
-						 title="Compressed Video Directory", default="C:\\Users\\momo\\Desktop\\cropped videos\\")
+						 title="Compressed Video Directory", default="path/to/saved/files")
 		suffix = prompt(text="Please enter the suffix of the video filename:",
 						title="Filename Suffix", default="_CROPPED")
-
-		"""mainDir = "C:\\Users\\momo\\Desktop\\video samples\\"
-					saveDir = "C:\\Users\\momo\\Desktop\\cropped videos\\"
-					suffix = '_CROPPED'"""
 
 		for folder, subfolders, files in os.walk(mainDir):
 
