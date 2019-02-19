@@ -6,7 +6,6 @@ from os.path import getsize, join, basename
 
 
 def main(mp4=True, webm=True):
-
 	global eligibleVidsEncountered, vidsCompressed, totalSizeOrig, totalSizeMP4,\
 		totalSizeWebM, doWebM, doMP4
 
@@ -30,27 +29,19 @@ def main(mp4=True, webm=True):
 						title="Filename Suffix", default="_CROPPED")
 
 		for folder, subfolders, files in os.walk(mainDir):
-
 			for file in files:
-
 				fileDir = folder + "\\" + file
-
 				fileSize = getsize(join(folder, file))
-
 				if (file.endswith(suffix + ".mp4") or file.endswith(suffix + ".webm")):
 					continue
-
 				eligibleVidsEncountered += 1
-
 				try:
 					file = VideoFileClip(join(folder, file))
-
 				except OSError:
 					print("Sorry,", file, "wasn't converted.")
 					pass
 
 				totalSizeOrig += fileSize
-
 				newFileDir = saveDir + basename(fileDir)[:-4] + suffix
 
 				print("Cropping file:", basename(fileDir),
@@ -58,9 +49,7 @@ def main(mp4=True, webm=True):
 
 				totalSizeMP4, totalSizeWebM = cropAndSaveFiles(
 					file, newFileDir, totalSizeMP4, totalSizeWebM)
-
 				vidsCompressed += 1
-
 	else:
 		print("No files were converted. Writing log and exitting program...")
 
@@ -68,7 +57,6 @@ def main(mp4=True, webm=True):
 def getFormat():
 	choice = confirm(text="Choose file format:", title="File Format", buttons=[
 					 "MP4", "WebM", "Both", "None"])
-
 	if (choice == "MP4"):
 		mp4, webm = True, False
 	elif (choice == "WebM"):
@@ -77,33 +65,26 @@ def getFormat():
 		mp4, webm = True, True
 	elif (choice == "None"):
 		mp4, webm = False, False
-
 	return mp4, webm
 
 
 def cropAndSaveFiles(file, newFileDir, totalSizeMP4, totalSizeWebM):
 	cropFile = crop(file, x1=120, x2=720, y2=660)
-
 	if (doMP4 == True):
 		cropFile.write_videofile(
 			newFileDir + ".mp4", fps=18, codec='libx264')
 		totalSizeMP4 += getsize(newFileDir + ".mp4")
-
 	if (doWebM == True):
 		cropFile.write_videofile(
 			newFileDir + ".webm", codec='libvpx')
 		totalSizeWebM += getsize(newFileDir + ".webm")
-
 	return totalSizeMP4, totalSizeWebM
 
 
 if __name__ == '__main__':
 	try:
-
 		mp4, webm = getFormat()
-
 		main(mp4=mp4, webm=webm)
-
 		if (vidsCompressed > 0):
 
 			totalSizeOrig = round(totalSizeOrig / 1000000, 2)
@@ -144,13 +125,10 @@ if __name__ == '__main__':
 								  str(totalSizeOrig) + "MB to " + str(totalSizeWebM) + "MB\n")
 					logFile.write(
 						"Compression Factor: " + str(round(totalSizeOrig / totalSizeWebM, 2)) + "times!\n")
-
 				logFile.write("*" * 50 + "\n")
-
 			else:
 				logFile.write("No files were converted into .mp4 or .webm \n")
 				logFile.write("*" * 50 + "\n")
-
 	except Exception as e:
 		raise e
 		print("An error occured:", e)
